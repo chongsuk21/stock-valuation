@@ -3,6 +3,7 @@ import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import ApexCharts from 'apexcharts'
+import Card from 'react-bootstrap/Card';
 
 import {
     getProfile,
@@ -46,14 +47,24 @@ class Dashboard extends Component {
       else {
           return (
 
-              <div className="container">
+              <div className="abc">
                   <form>
                     <input type="text" onChange={evt => {this.setState({...this.state, ticker: evt.target.value.toUpperCase()})}}/>
-                    {console.log(this.state.ticker)}
                     <input type="button" value="Submit" onClick={this.update}/>
                   </form>
+                  {JSON.stringify(this.props.profile, null, 2)}
+                  <Card className="defaultcard">
+                    <Card.Img variant="top" className="logo" src={this.props.profile? this.props.profile.profile.image: ""} />
+                    <Card.Body>
+                      <Card.Title className="title">
+                      {this.props.profile? this.props.profile.profile.companyName: ""}
+                      </Card.Title>
+                      <Card.Text className="description">
+                        {this.props.profile? this.props.profile.profile.description: ""}
+                      </Card.Text>
+                    </Card.Body>
+                  </Card>
 
-                  
               </div>
           );
       }
