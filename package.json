@@ -4,8 +4,12 @@
   "private": true,
   "proxy": "http://localhost:3005",
   "dependencies": {
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.4.0",
+    "@testing-library/user-event": "^7.2.1",
     "ajv": "latest",
     "axios": "latest",
+    "bootstrap": "^4.4.1",
     "chart.js": "latest",
     "chartist": "latest",
     "classnames": "latest",
@@ -15,20 +19,17 @@
     "pe7-icon": "latest",
     "prop-types": "latest",
     "radium": "latest",
-    "react-bootstrap": "latest",
+    "react": "^16.12.0",
+    "react-bootstrap": "^1.0.0-beta.16",
     "react-chartjs-2": "latest",
+    "react-dom": "^16.12.0",
     "react-ios-switch": "latest",
     "react-redux": "latest",
     "react-router-dom": "latest",
+    "react-scripts": "3.3.0",
     "redux": "latest",
     "redux-thunk": "latest",
-    "sass-loader": "latest",
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.4.0",
-    "@testing-library/user-event": "^7.2.1",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
-    "react-scripts": "3.3.0"
+    "sass-loader": "latest"
   },
   "devDependencies": {
     "cross-env": "latest",
@@ -36,8 +37,7 @@
     "sass-loader": "latest"
   },
   "scripts": {
-    "start": "concurrently \"node ../backend/bin/www\" \"react-scripts start\",",
-    "frontendStart": "react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
