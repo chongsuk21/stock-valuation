@@ -1,0 +1,51 @@
+{
+  "name": "valuation",
+  "version": "0.1.0",
+  "private": true,
+  "proxy": "http://localhost:3005",
+  "dependencies": {
+    "ajv": "latest",
+    "axios": "latest",
+    "chart.js": "latest",
+    "chartist": "latest",
+    "classnames": "latest",
+    "concurrently": "latest",
+    "lodash": "latest",
+    "moment": "latest",
+    "pe7-icon": "latest",
+    "prop-types": "latest",
+    "radium": "latest",
+    "react-bootstrap": "latest",
+    "react-chartjs-2": "latest",
+    "react-ios-switch": "latest",
+    "react-redux": "latest",
+    "react-router-dom": "latest",
+    "redux": "latest",
+    "redux-thunk": "latest",
+    "sass-loader": "latest",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.4.0",
+    "@testing-library/user-event": "^7.2.1",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-scripts": "3.3.0"
+  },
+  "devDependencies": {
+    "cross-env": "latest",
+    "node-sass": "latest",
+    "sass-loader": "latest"
+  },
+  "scripts": {
+    "start": "concurrently \"node ../backend/bin/www\" \"react-scripts start\",",
+    "frontendStart": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}
