@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 import { connect } from 'react-redux';
+import ApexCharts from 'apexcharts'
 
 import {
     getProfile,
     getPrice,
     getDcf,
-    setTicker
+    setTicker,
+    getHistoricalPrices
 } from "../../actions";
 
 const mapStateToProps = state => {
@@ -15,7 +17,8 @@ const mapStateToProps = state => {
         profile: state.finance.profile,
         price: state.finance.price,
         dcf: state.finance.dcf,
-        ticker:state.finance.ticker
+        ticker:state.finance.ticker,
+        histoPrices: state.finance.histoPrices
     }
 };
 
@@ -29,10 +32,12 @@ class Dashboard extends Component {
 
         this.update = this.update.bind(this);
     }
+
   update = () => {
      this.props.getProfile(this.state.ticker);
      this.props.getPrice(this.state.ticker);
      this.props.getDcf(this.state.ticker);
+     this.props.getHistoricalPrices(this.state.ticker);
    };
 
   render() {
@@ -48,10 +53,7 @@ class Dashboard extends Component {
                     <input type="button" value="Submit" onClick={this.update}/>
                   </form>
 
-{JSON.stringify(this.props.profile, null, 2)}
-{JSON.stringify(this.props.price, null, 2)}
-{JSON.stringify(this.props.dcf, null, 2)}
-
+                  
               </div>
           );
       }
@@ -62,7 +64,8 @@ const mapDispatchToProps = {
     getProfile,
     getPrice,
     getDcf,
-    setTicker
+    setTicker,
+    getHistoricalPrices
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

@@ -1,12 +1,15 @@
 import axios from 'axios';
-import _ from 'lodash';
-import { parseCoin } from '../utilities/ParseCoin';
 
 import {
     GET_PROFILE,
     GET_PRICE,
     GET_DCF,
-    SET_TICKER
+    SET_TICKER,
+    GET_QUOTE,
+    GET_KEY_RATIOS,
+    GET_FINANCIAL_GROWTH,
+    GET_RATING,
+    GET_HISTORICAL_PRICES
 } from './constants';
 
 import config from '../config/config';
@@ -18,17 +21,52 @@ export const getProfile = ticker => {
     }
 };
 
-export const getPrice= ticker => {
+export const getPrice = ticker => {
     return async dispatch => {
         let price = await axios.get(`https://financialmodelingprep.com/api/v3/stock/real-time-price/${ticker}`);
         dispatch({type: GET_PRICE, payload: price.data});
     }
 };
 
-export const getDcf= ticker => {
+export const getDcf = ticker => {
     return async dispatch => {
         let dcf = await axios.get(`https://financialmodelingprep.com/api/v3/company/discounted-cash-flow/${ticker}`);
         dispatch({type: GET_DCF, payload: dcf.data});
+    }
+};
+
+export const getQuote = ticker => {
+    return async dispatch => {
+        let quote = await axios.get(`https://financialmodelingprep.com/api/v3/quote/${ticker}`);
+        dispatch({type: GET_QUOTE, payload: quote.data});
+    }
+};
+
+export const getKeyRatios = ticker => {
+    return async dispatch => {
+        let ratios = await axios.get(`https://financialmodelingprep.com/api/v3/company-key-metrics/${ticker}`);
+        dispatch({type: GET_KEY_RATIOS, payload: ratios.data});
+    }
+};
+
+export const getFinancialGrowth = ticker => {
+    return async dispatch => {
+        let growth = await axios.get(`https://financialmodelingprep.com/api/v3/financial-statement-growth/${ticker}`);
+        dispatch({type: GET_FINANCIAL_GROWTH, payload: growth.data});
+    }
+};
+
+export const getRating = ticker => {
+    return async dispatch => {
+        let rating = await axios.get(`https://financialmodelingprep.com/api/v3/company/rating/${ticker}`);
+        dispatch({type: GET_RATING, payload: rating.data});
+    }
+};
+
+export const getHistoricalPrices = ticker => {
+    return async dispatch => {
+        let prices = await axios.get(`https://financialmodelingprep.com/api/v3/historical-price-full/${ticker}`);
+        dispatch({type: GET_HISTORICAL_PRICES, payload: prices.data});
     }
 };
 
