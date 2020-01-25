@@ -10,7 +10,7 @@ import rootReducer from './reducers';
 import Dashboard from './components/authentication/Dashboard';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-
+import './stylesheets/new.scss'
 const store = createStore(rootReducer, applyMiddleware(thunk));
 
 const routing = (
