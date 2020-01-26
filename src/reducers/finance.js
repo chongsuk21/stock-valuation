@@ -11,7 +11,8 @@ import {
     GET_KEY_RATIOS,
     GET_FINANCIAL_STATEMENTS,
     GET_CASH_FLOW,
-    GET_COMPANY_RATING
+    GET_COMPANY_RATING,
+    GET_BALANCE_SHEET
 } from '../actions/constants';
 import _ from 'lodash';
 
@@ -108,6 +109,11 @@ export default (state = {}, action) => {
             return {
                 ...state,
                 com_rating: action.payload.company
+            };
+        case GET_BALANCE_SHEET:
+            return {
+                ...state,
+                balanceSheet: action.payload.financials
             };
         default:
             return state;
