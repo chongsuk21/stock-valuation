@@ -2,14 +2,17 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import ApexCharts from 'apexcharts'
-import Card from 'react-bootstrap/Card';
-
+import Card from 'react-bootstrap/Card'
+import ProgressBar from 'react-bootstrap/ProgressBar'
 import {
     getProfile,
     getPrice,
     getDcf,
     setTicker,
+    getQuote,
+    getFinancialratio,
+    getFinancialGrowth,
+    getRating,
     getHistoricalPrices
 } from "../../actions";
 
@@ -19,7 +22,11 @@ const mapStateToProps = state => {
         price: state.finance.price,
         dcf: state.finance.dcf,
         ticker:state.finance.ticker,
-        histoPrices: state.finance.histoPrices
+        quote:state.finance.quote,
+        ratios:state.finance.ratios,
+        growth:state.finance.growth,
+        rating:state.finance.rating,
+        histoPrices:state.finance.histoPrices
     }
 };
 
@@ -33,11 +40,14 @@ class Dashboard extends Component {
 
         this.update = this.update.bind(this);
     }
-
   update = () => {
      this.props.getProfile(this.state.ticker);
      this.props.getPrice(this.state.ticker);
      this.props.getDcf(this.state.ticker);
+     this.props.getQuote(this.state.ticker);
+     this.props.getFinancialratio(this.state.ticker);
+     this.props.getFinancialGrowth(this.state.ticker);
+     this.props.getRating(this.state.ticker);
      this.props.getHistoricalPrices(this.state.ticker);
    };
 
@@ -48,22 +58,52 @@ class Dashboard extends Component {
           return (
 
               <div className="abc">
+
+
                   <form>
                     <input type="text" onChange={evt => {this.setState({...this.state, ticker: evt.target.value.toUpperCase()})}}/>
                     <input type="button" value="Submit" onClick={this.update}/>
                   </form>
-                  {JSON.stringify(this.props.profile, null, 2)}
+
+                  {JSON.stringify(this.props.dcf, null, 2)}
+
                   <Card className="defaultcard">
+                    <h1>Executive Summary</h1>
                     <Card.Img variant="top" className="logo" src={this.props.profile? this.props.profile.profile.image: ""} />
                     <Card.Body>
                       <Card.Title className="title">
                       {this.props.profile? this.props.profile.profile.companyName: ""}
+
                       </Card.Title>
+
                       <Card.Text className="description">
+                      <br />
+                      {this.props.profile? "Price : $" + this.props.profile.profile.price: ""}
+                      {this.props.quote && this.props.quote.change > 0? <span class="oi oi-caret-top"></span> : <span class="oi oi-caret-bottom"></span>}
+                      {this.props.quote? "  "+this.props.quote.change +"(" +this.props.quote.changesPercentage + ")":""}
+                      <br />
                         {this.props.profile? this.props.profile.profile.description: ""}
+                        <br />
+                        {this.props.profile? "CEO : " + this.props.profile.profile.ceo: ""}
+                        <br />
+                        {this.props.profile? "Industry : " + this.props.profile.profile.industry: ""}
+
                       </Card.Text>
                     </Card.Body>
                   </Card>
+
+
+                  <hr />
+                  //DCF
+                  <Card style={{ width: '18rem' }}>
+                    <Card.Body>
+                      <Card.Title>Card Title</Card.Title>
+                      {this.props.profile? <ProgressBar now={60} label={`${"$ "+this.props.profile.profile.price}`} />: ""}
+                      {this.props.dcf? <ProgressBar now={60} label={`${"$ "+this.props.dcf.dcf}`} />: ""}
+
+                    </Card.Body>
+                  </Card>
+
 
               </div>
           );
@@ -76,6 +116,10 @@ const mapDispatchToProps = {
     getPrice,
     getDcf,
     setTicker,
+    getQuote,
+    getFinancialratio,
+    getFinancialGrowth,
+    getRating,
     getHistoricalPrices
 };
 

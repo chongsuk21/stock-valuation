@@ -6,7 +6,7 @@ import {
     GET_DCF,
     SET_TICKER,
     GET_QUOTE,
-    GET_KEY_RATIOS,
+    GET_FINANCIAL_RATIOS,
     GET_FINANCIAL_GROWTH,
     GET_RATING,
     GET_HISTORICAL_PRICES
@@ -42,10 +42,10 @@ export const getQuote = ticker => {
     }
 };
 
-export const getKeyRatios = ticker => {
+export const getFinancialratio = ticker => {
     return async dispatch => {
-        let ratios = await axios.get(`https://financialmodelingprep.com/api/v3/company-key-metrics/${ticker}`);
-        dispatch({type: GET_KEY_RATIOS, payload: ratios.data});
+        let ratios = await axios.get(`https://financialmodelingprep.com/api/v3/financial-ratios/${ticker}`);
+        dispatch({type: GET_FINANCIAL_RATIOS, payload: ratios.data});
     }
 };
 
@@ -69,6 +69,7 @@ export const getHistoricalPrices = ticker => {
         dispatch({type: GET_HISTORICAL_PRICES, payload: prices.data});
     }
 };
+
 
 /*Tickers */
 
