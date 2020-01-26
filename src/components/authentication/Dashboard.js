@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import Card from 'react-bootstrap/Card'
 import ProgressBar from 'react-bootstrap/ProgressBar'
 import TradingViewWidget, { Themes } from 'react-tradingview-widget';
-import { Bar, Line } from 'react-chartjs-2';
+import { Bar, Line, Polar } from 'react-chartjs-2';
 import _ from 'lodash';
 
 import {
@@ -19,12 +19,14 @@ import {
     getRating,
     getHistoricalPrices,
     getFinancialStatements,
-    getKeyRatios
+    getKeyRatios,
+    getBalanceSheet
 } from "../../actions";
 import {
     filterFinancialsForDate, filterFinancialsForEPS,
     filterFinancialsForNetIncome,
-    filterFinancialsForRevenue
+    filterFinancialsForRevenue,
+    filterBalanceForPolar
 } from "../../utilities/filtering";
 import {format} from "../../utilities/CurrencyFormat";
 
@@ -41,7 +43,8 @@ const mapStateToProps = state => {
         rating:state.finance.rating,
         histoPrices:state.finance.histoPrices,
         keyratios:state.finance.keyratios,
-        financials: state.finance.financials
+        financials: state.finance.financials,
+        balanceSheet: state.finance.balanceSheet
 
     }
 };
@@ -84,6 +87,7 @@ class Dashboard extends Component {
      this.props.getHistoricalPrices(this.state.ticker);
      this.props.getKeyRatios(this.state.ticker);
      this.props.getFinancialStatements(this.state.ticker);
+     this.props.getBalanceSheet(this.state.ticker);
    };
 
 
@@ -186,6 +190,27 @@ class Dashboard extends Component {
                   }]
               },
           };
+
+          const PolarData = {
+              datasets: [{
+                  data: filterBalanceForPolar(this.props.balanceSheet),
+                  backgroundColor: [
+                      '#FF6384',
+                      '#4BC0C0',
+                      '#FFCE56',
+                      '#E7E9ED',
+                      '#36A2EB'
+                  ],
+                  label: 'My dataset' // for legend
+              }],
+              labels: [
+                  'Cash and cash equivalents',
+                  'Total Debt',
+                  'Total assets',
+                  'Total shareholders equity',
+                  'Retained earnings (deficit)'
+              ]
+          };
           return (
 
               <div className="abc">
@@ -232,6 +257,7 @@ class Dashboard extends Component {
                           <Card.Text className="description">
                               <Bar data={Revdata} options={Revoptions}/>
                               <Line data={EPSdata} options={EPSoptions} />
+                              <Polar data={PolarData}/>
                           </Card.Text>
                       </Card.Body>
                   </Card>
@@ -292,7 +318,8 @@ const mapDispatchToProps = {
     getRating,
     getHistoricalPrices,
     getKeyRatios,
-    getFinancialStatements
+    getFinancialStatements,
+    getBalanceSheet
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

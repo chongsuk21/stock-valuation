@@ -23,3 +23,12 @@ export const filterFinancialsForEPS = data => {
         return parseFloat(rev.EPS);
     }).reverse();
 };
+
+export const filterBalanceForPolar = data => {
+    if (!data)
+        return;
+
+    const single = data[0];
+    console.log(data);
+    return [single['Cash and cash equivalents'], single['Total debt'], single['Total assets'], single['Total shareholders equity'], single['Retained earnings (deficit)']];
+}

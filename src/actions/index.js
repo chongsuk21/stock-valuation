@@ -11,7 +11,8 @@ import {
     GET_RATING,
     GET_HISTORICAL_PRICES,
     GET_KEY_RATIOS,
-    GET_FINANCIAL_STATEMENTS
+    GET_FINANCIAL_STATEMENTS,
+    GET_BALANCE_SHEET
 } from './constants';
 
 import config from '../config/config';
@@ -81,6 +82,12 @@ export const getFinancialStatements = ticker => {
     return async dispatch => {
         let finance = await axios.get(`https://financialmodelingprep.com/api/v3/financials/income-statement/${ticker}`);
         dispatch({type: GET_FINANCIAL_STATEMENTS, payload: finance.data});
+    }
+};
+export const getBalanceSheet = ticker => {
+    return async dispatch => {
+        let balanceSheet = await axios.get(`https://financialmodelingprep.com/api/v3/financials/balance-sheet-statement/${ticker}`);
+        dispatch({type: GET_BALANCE_SHEET, payload: balanceSheet.data});
     }
 };
 
