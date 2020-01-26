@@ -23,3 +23,17 @@ export const filterFinancialsForEPS = data => {
         return parseFloat(rev.EPS);
     }).reverse();
 };
+
+// Cashflow
+
+export const filterCashflowForDate = data => {
+    return _.map(data, fin => {
+        return fin.date;
+    }).reverse();
+};
+
+export const filterCashflowForNetcashflow = data => {
+    return _.map(data, cf => {
+        return parseFloat(cf["Net cash flow / Change in cash"]);
+    }).reverse();
+};

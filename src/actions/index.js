@@ -11,7 +11,8 @@ import {
     GET_RATING,
     GET_HISTORICAL_PRICES,
     GET_KEY_RATIOS,
-    GET_FINANCIAL_STATEMENTS
+    GET_FINANCIAL_STATEMENTS,
+    GET_CASH_FLOW
 } from './constants';
 
 import config from '../config/config';
@@ -90,5 +91,12 @@ export const getFinancialStatements = ticker => {
 export const setTicker= ticker => {
     return async dispatch => {
         dispatch({type: SET_TICKER, payload: ticker});
+    }
+};
+
+export const getCashflow = ticker => {
+    return async dispatch => {
+        let flow = await axios.get(`https://financialmodelingprep.com/api/v3/financials/cash-flow-statement/${ticker}`);
+        dispatch({type: GET_CASH_FLOW, payload: flow.data});
     }
 };

@@ -19,12 +19,15 @@ import {
     getRating,
     getHistoricalPrices,
     getFinancialStatements,
-    getKeyRatios
+    getKeyRatios,
+    getCashflow
 } from "../../actions";
 import {
     filterFinancialsForDate, filterFinancialsForEPS,
     filterFinancialsForNetIncome,
-    filterFinancialsForRevenue
+    filterFinancialsForRevenue,
+    filterCashflowForNetcashflow,
+    filterCashflowForDate
 } from "../../utilities/filtering";
 import {format} from "../../utilities/CurrencyFormat";
 
@@ -41,8 +44,8 @@ const mapStateToProps = state => {
         rating:state.finance.rating,
         histoPrices:state.finance.histoPrices,
         keyratios:state.finance.keyratios,
-        financials: state.finance.financials
-
+        financials: state.finance.financials,
+        cashflow: state.finance.cashflow
     }
 };
 
@@ -84,6 +87,7 @@ class Dashboard extends Component {
      this.props.getHistoricalPrices(this.state.ticker);
      this.props.getKeyRatios(this.state.ticker);
      this.props.getFinancialStatements(this.state.ticker);
+     this.props.getCashflow(this.state.ticker);
    };
 
 
@@ -186,6 +190,43 @@ class Dashboard extends Component {
                   }]
               },
           };
+          const Cfdata = {
+             labels: filterCashflowForDate(this.props.cashflow),
+             datasets: [
+                 {
+                     label: 'Net Cashflow',
+                     lineTension: 0.1,
+                     backgroundColor: 'rgba(75,192,192,0.4)',
+                     borderColor: 'rgba(75,192,192,1)',
+                     borderCapStyle: 'butt',
+                     borderDash: [],
+                     borderDashOffset: 0.0,
+                     borderJoinStyle: 'miter',
+                     pointBorderColor: 'rgba(75,192,192,1)',
+                     pointBackgroundColor: '#fff',
+                     pointBorderWidth: 1,
+                     pointHoverRadius: 5,
+                     pointHoverBackgroundColor: 'rgba(75,192,192,1)',
+                     pointHoverBorderColor: 'rgba(220,220,220,1)',
+                     pointHoverBorderWidth: 2,
+                     pointHitRadius: 10,
+                     data: filterCashflowForNetcashflow(this.props.cashflow)
+                 }
+             ]
+         };
+
+          const Cfoptions = {
+             scales: {
+                 yAxes: [{
+                     ticks: {
+                         beginAtZero: true,
+                         callback: (value) => {
+                             return format('CAD', value);
+                         }
+                     }
+                 }]
+             },
+         };
           return (
 
               <div className="abc">
@@ -232,6 +273,7 @@ class Dashboard extends Component {
                           <Card.Text className="description">
                               <Bar data={Revdata} options={Revoptions}/>
                               <Line data={EPSdata} options={EPSoptions} />
+                              <Bar data={Cfdata} options={Cfoptions}/>
                           </Card.Text>
                       </Card.Body>
                   </Card>
@@ -292,7 +334,8 @@ const mapDispatchToProps = {
     getRating,
     getHistoricalPrices,
     getKeyRatios,
-    getFinancialStatements
+    getFinancialStatements,
+    getCashflow
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
