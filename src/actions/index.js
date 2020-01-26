@@ -9,7 +9,8 @@ import {
     GET_FINANCIAL_RATIOS,
     GET_FINANCIAL_GROWTH,
     GET_RATING,
-    GET_HISTORICAL_PRICES
+    GET_HISTORICAL_PRICES,
+    GET_KEY_RATIOS
 } from './constants';
 
 import config from '../config/config';
@@ -67,6 +68,12 @@ export const getHistoricalPrices = ticker => {
     return async dispatch => {
         let prices = await axios.get(`https://financialmodelingprep.com/api/v3/historical-price-full/${ticker}`);
         dispatch({type: GET_HISTORICAL_PRICES, payload: prices.data});
+    }
+};
+export const getKeyRatios = ticker => {
+    return async dispatch => {
+        let keyratios = await axios.get(`https://financialmodelingprep.com/api/v3/company-key-metrics/${ticker}`);
+        dispatch({type: GET_KEY_RATIOS, payload: keyratios.data});
     }
 };
 

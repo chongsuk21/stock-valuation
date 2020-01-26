@@ -4,6 +4,8 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 import Card from 'react-bootstrap/Card'
 import ProgressBar from 'react-bootstrap/ProgressBar'
+import TradingViewWidget, { Themes } from 'react-tradingview-widget';
+
 import {
     getProfile,
     getPrice,
@@ -13,7 +15,8 @@ import {
     getFinancialratio,
     getFinancialGrowth,
     getRating,
-    getHistoricalPrices
+    getHistoricalPrices,
+    getKeyRatios
 } from "../../actions";
 
 const mapStateToProps = state => {
@@ -26,16 +29,35 @@ const mapStateToProps = state => {
         ratios:state.finance.ratios,
         growth:state.finance.growth,
         rating:state.finance.rating,
-        histoPrices:state.finance.histoPrices
+        histoPrices:state.finance.histoPrices,
+        keyratios:state.finance.keyratios
+
     }
 };
 
 class Dashboard extends Component {
     constructor(props) {
         super(props);
-
         this.state = {
-            ticker: ''
+            ticker: '',
+            options: {
+                chart: {
+                    type: 'candlestick',
+                    height: 350
+                },
+                title: {
+                    text: 'CandleStick Chart',
+                    align: 'left'
+                },
+                xaxis: {
+                    type: 'datetime'
+                },
+                yaxis: {
+                    tooltip: {
+                        enabled: true
+                    }
+                }
+            }
         };
 
         this.update = this.update.bind(this);
@@ -49,6 +71,8 @@ class Dashboard extends Component {
      this.props.getFinancialGrowth(this.state.ticker);
      this.props.getRating(this.state.ticker);
      this.props.getHistoricalPrices(this.state.ticker);
+     this.props.getKeyRatios(this.state.ticker);
+
    };
 
   render() {
@@ -104,7 +128,10 @@ class Dashboard extends Component {
                     </Card.Body>
                   </Card>
 
-
+                  { this.state.ticker ?
+                      <TradingViewWidget theme={Themes.DARK} symbol={this.state.ticker}/>
+                      : ''
+                  }
               </div>
           );
       }
@@ -120,7 +147,8 @@ const mapDispatchToProps = {
     getFinancialratio,
     getFinancialGrowth,
     getRating,
-    getHistoricalPrices
+    getHistoricalPrices,
+    getKeyRatios
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

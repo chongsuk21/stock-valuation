@@ -7,8 +7,10 @@ import {
     GET_FINANCIAL_RATIOS,
     GET_FINANCIAL_GROWTH,
     GET_RATING,
-    GET_HISTORICAL_PRICES
+    GET_HISTORICAL_PRICES,
+    GET_KEY_RATIOS
 } from '../actions/constants';
+import _ from 'lodash';
 
 export default (state = {}, action) => {
     switch(action.type) {
@@ -55,7 +57,12 @@ export default (state = {}, action) => {
         case GET_HISTORICAL_PRICES:
             return {
                 ...state,
-                histoPrices: action.payload
+                histoPrices: action.payload.historical
+            };
+        case GET_KEY_RATIOS:
+            return {
+                ...state,
+                keyratios: action.payload
             };
 
         default:
