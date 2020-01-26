@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import Card from 'react-bootstrap/Card'
 import ProgressBar from 'react-bootstrap/ProgressBar'
 import TradingViewWidget, { Themes } from 'react-tradingview-widget';
+import { Line } from 'react-chartjs-2';
 
 import {
     getProfile,
@@ -72,8 +73,9 @@ class Dashboard extends Component {
      this.props.getRating(this.state.ticker);
      this.props.getHistoricalPrices(this.state.ticker);
      this.props.getKeyRatios(this.state.ticker);
-
    };
+
+
 
   render() {
       if (this.state.redirectTo)
@@ -117,8 +119,20 @@ class Dashboard extends Component {
                   </Card>
 
 
+
+                  <Card className="defaultcard Growth">
+                      <Card.Body>
+                          <Card.Title className="title">
+                              Financial Growth
+                          </Card.Title>
+                          <Card.Text className="description">
+                              <Line />
+                          </Card.Text>
+                      </Card.Body>
+                  </Card>
+
                   <hr />
-                  //DCF
+
                   <Card style={{ width: '18rem' }}>
                     <Card.Body>
                       <Card.Title>Card Title</Card.Title>
@@ -149,6 +163,31 @@ const mapDispatchToProps = {
     getRating,
     getHistoricalPrices,
     getKeyRatios
+};
+
+const EPSdata = {
+    labels: '',
+    datasets: [
+        {
+            label: 'Revenue',
+            lineTension: 0.1,
+            backgroundColor: 'rgba(75,192,192,0.4)',
+            borderColor: 'rgba(75,192,192,1)',
+            borderCapStyle: 'butt',
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderJoinStyle: 'miter',
+            pointBorderColor: 'rgba(75,192,192,1)',
+            pointBackgroundColor: '#fff',
+            pointBorderWidth: 1,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: 'rgba(75,192,192,1)',
+            pointHoverBorderColor: 'rgba(220,220,220,1)',
+            pointHoverBorderWidth: 2,
+            pointHitRadius: 10,
+            data: []
+        }
+    ]
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
