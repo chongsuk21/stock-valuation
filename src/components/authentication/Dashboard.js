@@ -4,13 +4,15 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 import Card from 'react-bootstrap/Card';
 import TradingViewWidget, { Themes } from 'react-tradingview-widget';
+import { Line } from 'react-chartjs-2';
 
 import {
     getProfile,
     getPrice,
     getDcf,
     setTicker,
-    getHistoricalPrices
+    getHistoricalPrices,
+    getFinancialGrowth
 } from "../../actions";
 
 const mapStateToProps = state => {
@@ -19,6 +21,7 @@ const mapStateToProps = state => {
         price: state.finance.price,
         dcf: state.finance.dcf,
         ticker:state.finance.ticker,
+        growth: state.finance.ticker,
         histoPrices: state.finance.histoPrices
     }
 };
@@ -56,6 +59,7 @@ class Dashboard extends Component {
      this.props.getPrice(this.state.ticker);
      this.props.getDcf(this.state.ticker);
      this.props.getHistoricalPrices(this.state.ticker);
+     this.props.getFinancialGrowth(this.state.ticker);
    };
 
   render() {
@@ -70,7 +74,7 @@ class Dashboard extends Component {
                     <input type="button" value="Submit" onClick={this.update}/>
                   </form>
                   {JSON.stringify(this.props.profile, null, 2)}
-                  <Card className="defaultcard">
+                  <Card className="defaultcard Summary">
                     <Card.Img variant="top" className="logo" src={this.props.profile? this.props.profile.profile.image: ""} />
                     <Card.Body>
                       <Card.Title className="title">
@@ -80,6 +84,17 @@ class Dashboard extends Component {
                         {this.props.profile? this.props.profile.profile.description: ""}
                       </Card.Text>
                     </Card.Body>
+                  </Card>
+
+                  <Card className="defaultcard Growth">
+                      <Card.Body>
+                          <Card.Title className="title">
+                              Financial Growth
+                          </Card.Title>
+                          <Card.Text className="description">
+                              <Line />
+                          </Card.Text>
+                      </Card.Body>
                   </Card>
 
                   { this.state.ticker ?
@@ -97,7 +112,8 @@ const mapDispatchToProps = {
     getPrice,
     getDcf,
     setTicker,
-    getHistoricalPrices
+    getHistoricalPrices,
+    getFinancialGrowth
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

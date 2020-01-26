@@ -6,6 +6,7 @@
   "dependencies": {
     "axios": "latest",
     "bootstrap": "^4.4.1",
+    "chart.js": "^2.9.3",
     "classnames": "latest",
     "concurrently": "latest",
     "lodash": "latest",
@@ -15,6 +16,7 @@
     "radium": "latest",
     "react": "^16.12.0",
     "react-bootstrap": "^1.0.0-beta.16",
+    "react-chartjs-2": "^2.8.0",
     "react-dom": "^16.12.0",
     "react-redux": "latest",
     "react-router-dom": "latest",
