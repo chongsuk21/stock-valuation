@@ -70,7 +70,6 @@ export default (state = {}, action) => {
                 ...state,
                 ratios: action.payload,
                 filtered_ratios: obj,
-                filtered_ratios_keys: Object.keys(obj)
             };
         case GET_FINANCIAL_GROWTH:
             return {
