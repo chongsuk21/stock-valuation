@@ -8,7 +8,8 @@ import {
     GET_FINANCIAL_GROWTH,
     GET_RATING,
     GET_HISTORICAL_PRICES,
-    GET_KEY_RATIOS
+    GET_KEY_RATIOS,
+    GET_FINANCIAL_STATEMENTS
 } from '../actions/constants';
 import _ from 'lodash';
 
@@ -96,6 +97,11 @@ export default (state = {}, action) => {
             return {
                 ...state,
                 keyratios: action.payload
+            };
+        case GET_FINANCIAL_STATEMENTS:
+            return {
+                ...state,
+                financials: action.payload.financials
             };
 
         default:
