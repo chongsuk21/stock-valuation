@@ -5,8 +5,9 @@ import { connect } from 'react-redux';
 import Card from 'react-bootstrap/Card'
 import ProgressBar from 'react-bootstrap/ProgressBar'
 import TradingViewWidget, { Themes } from 'react-tradingview-widget';
-import { Line } from 'react-chartjs-2';
+import { Bar, Line } from 'react-chartjs-2';
 import _ from 'lodash';
+
 import {
     getProfile,
     getPrice,
@@ -17,8 +18,15 @@ import {
     getFinancialGrowth,
     getRating,
     getHistoricalPrices,
+    getFinancialStatements,
     getKeyRatios
 } from "../../actions";
+import {
+    filterFinancialsForDate, filterFinancialsForEPS,
+    filterFinancialsForNetIncome,
+    filterFinancialsForRevenue
+} from "../../utilities/filtering";
+import {format} from "../../utilities/CurrencyFormat";
 
 const mapStateToProps = state => {
     return {
@@ -33,7 +41,7 @@ const mapStateToProps = state => {
         rating:state.finance.rating,
         histoPrices:state.finance.histoPrices,
         keyratios:state.finance.keyratios,
-        filtered_ratios_keys:state.finance.filtered_ratios_keys
+        financials: state.finance.financials
 
     }
 };
@@ -75,6 +83,7 @@ class Dashboard extends Component {
      this.props.getRating(this.state.ticker);
      this.props.getHistoricalPrices(this.state.ticker);
      this.props.getKeyRatios(this.state.ticker);
+     this.props.getFinancialStatements(this.state.ticker);
    };
 
 
@@ -83,6 +92,100 @@ class Dashboard extends Component {
       if (this.state.redirectTo)
           return <Redirect push to={{ pathname: this.state.redirectTo }}/>;
       else {
+           const Revdata = {
+              labels: filterFinancialsForDate(this.props.financials),
+              datasets: [
+                  {
+                      label: 'Revenue',
+                      lineTension: 0.1,
+                      backgroundColor: 'rgba(75,192,192,0.4)',
+                      borderColor: 'rgba(75,192,192,1)',
+                      borderCapStyle: 'butt',
+                      borderDash: [],
+                      borderDashOffset: 0.0,
+                      borderJoinStyle: 'miter',
+                      pointBorderColor: 'rgba(75,192,192,1)',
+                      pointBackgroundColor: '#fff',
+                      pointBorderWidth: 1,
+                      pointHoverRadius: 5,
+                      pointHoverBackgroundColor: 'rgba(75,192,192,1)',
+                      pointHoverBorderColor: 'rgba(220,220,220,1)',
+                      pointHoverBorderWidth: 2,
+                      pointHitRadius: 10,
+                      data: filterFinancialsForRevenue(this.props.financials)
+                  },
+                  {
+                      label: 'Net Income',
+                      lineTension: 0.1,
+                      backgroundColor: 'black',
+                      borderColor: 'rgba(75,192,192,1)',
+                      borderCapStyle: 'butt',
+                      borderDash: [],
+                      borderDashOffset: 0.0,
+                      borderJoinStyle: 'miter',
+                      pointBorderColor: 'rgba(75,192,192,1)',
+                      pointBackgroundColor: '#fff',
+                      pointBorderWidth: 1,
+                      pointHoverRadius: 5,
+                      pointHoverBackgroundColor: 'rgba(75,192,192,1)',
+                      pointHoverBorderColor: 'rgba(220,220,220,1)',
+                      pointHoverBorderWidth: 2,
+                      pointHitRadius: 10,
+                      data: filterFinancialsForNetIncome(this.props.financials)
+                  }
+              ]
+          };
+
+           const Revoptions = {
+              scales: {
+                  yAxes: [{
+                      ticks: {
+                          beginAtZero: true,
+                          callback: (value) => {
+                              return format('CAD', value);
+                          }
+                      }
+                  }]
+              },
+          };
+
+           const EPSdata = {
+              labels: filterFinancialsForDate(this.props.financials),
+              datasets: [
+                  {
+                      label: 'EPS YoY',
+                      lineTension: 0.1,
+                      backgroundColor: 'rgba(75,192,192,0.4)',
+                      borderColor: 'rgba(75,192,192,1)',
+                      borderCapStyle: 'butt',
+                      borderDash: [],
+                      borderDashOffset: 0.0,
+                      borderJoinStyle: 'miter',
+                      pointBorderColor: 'rgba(75,192,192,1)',
+                      pointBackgroundColor: '#fff',
+                      pointBorderWidth: 1,
+                      pointHoverRadius: 5,
+                      pointHoverBackgroundColor: 'rgba(75,192,192,1)',
+                      pointHoverBorderColor: 'rgba(220,220,220,1)',
+                      pointHoverBorderWidth: 2,
+                      pointHitRadius: 10,
+                      data: filterFinancialsForEPS(this.props.financials)
+                  }
+              ]
+          };
+
+           const EPSoptions = {
+              scales: {
+                  yAxes: [{
+                      ticks: {
+                          beginAtZero: true,
+                          callback: (value) => {
+                              return format('CAD', value);
+                          }
+                      }
+                  }]
+              },
+          };
           return (
 
               <div className="abc">
@@ -127,7 +230,8 @@ class Dashboard extends Component {
                               Financial Growth
                           </Card.Title>
                           <Card.Text className="description">
-                              <Line />
+                              <Bar data={Revdata} options={Revoptions}/>
+                              <Line data={EPSdata} options={EPSoptions} />
                           </Card.Text>
                       </Card.Body>
                   </Card>
@@ -187,32 +291,8 @@ const mapDispatchToProps = {
     getFinancialGrowth,
     getRating,
     getHistoricalPrices,
-    getKeyRatios
-};
-
-const EPSdata = {
-    labels: '',
-    datasets: [
-        {
-            label: 'Revenue',
-            lineTension: 0.1,
-            backgroundColor: 'rgba(75,192,192,0.4)',
-            borderColor: 'rgba(75,192,192,1)',
-            borderCapStyle: 'butt',
-            borderDash: [],
-            borderDashOffset: 0.0,
-            borderJoinStyle: 'miter',
-            pointBorderColor: 'rgba(75,192,192,1)',
-            pointBackgroundColor: '#fff',
-            pointBorderWidth: 1,
-            pointHoverRadius: 5,
-            pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-            pointHoverBorderColor: 'rgba(220,220,220,1)',
-            pointHoverBorderWidth: 2,
-            pointHitRadius: 10,
-            data: []
-        }
-    ]
+    getKeyRatios,
+    getFinancialStatements
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
