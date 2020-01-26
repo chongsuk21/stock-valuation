@@ -40,9 +40,42 @@ export default (state = {}, action) => {
                 quote: action.payload[0]
             };
         case GET_FINANCIAL_RATIOS:
+        let filter = {i1: 0, i2: 0, i3: 0, i4: 0, p1: 0, p2: 0, p3: 0, p4: 0, l1: 0, l2: 0, d1: 0, c1: 0, i:0};
+            _.map(action.payload.ratios, data => {
+              filter.i1 += parseFloat(data.investmentValuationRatios.priceToBookRatio)
+              filter.i2 += parseFloat(data.investmentValuationRatios.priceEarningsRatio)
+              filter.i3 += parseFloat(data.investmentValuationRatios.dividendYield)
+              filter.i4 += parseFloat(data.investmentValuationRatios.priceToFreeCashFlowsRatio)
+              filter.p1 += parseFloat(data.profitabilityIndicatorRatios.returnOnAssets)
+              filter.p2 += parseFloat(data.profitabilityIndicatorRatios.returnOnEquity)
+              filter.p3 += parseFloat(data.profitabilityIndicatorRatios.netProfitMargin)
+              filter.p4 += parseFloat(data.profitabilityIndicatorRatios.operatingProfitMargin)
+              filter.l1 += parseFloat(data.liquidityMeasurementRatios.currentRatio)
+              filter.l2 += parseFloat(data.liquidityMeasurementRatios.debtRatios)
+              filter.d1 += parseFloat(data.debtRatios.debtRatio)
+              filter.c1 += parseFloat(data.cashFlowIndicatorRatios.dividendPayoutRatio)
+
+              filter.i++;
+            })
+            let obj = {
+              i1: filter.i1/ filter.i,
+              i2: filter.i2/ filter.i,
+              i3: filter.i3/ filter.i,
+              i4: filter.i4/ filter.i,
+              p1: filter.p1/ filter.i,
+              p2: filter.p2/ filter.i,
+              p3: filter.p3/ filter.i,
+              p4: filter.p4/ filter.i,
+              l1: filter.l1/ filter.i,
+              l2: filter.l2/ filter.i,
+              d1: filter.d1/ filter.i,
+              c1: filter.c1/ filter.i
+            }
+            console.log(obj)
             return {
                 ...state,
-                ratios: action.payload
+                ratios: action.payload,
+                filtered_ratios: obj
             };
         case GET_FINANCIAL_GROWTH:
             return {

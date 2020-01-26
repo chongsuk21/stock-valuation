@@ -89,7 +89,7 @@ class Dashboard extends Component {
                     <input type="button" value="Submit" onClick={this.update}/>
                   </form>
 
-                  {JSON.stringify(this.props.dcf, null, 2)}
+                  {JSON.stringify(this.props.ratios, null, 2)}
 
                   <Card className="defaultcard">
                     <h1>Executive Summary</h1>
