@@ -9,6 +9,7 @@ import {
     GET_RATING,
     GET_HISTORICAL_PRICES
 } from '../actions/constants';
+import _ from 'lodash';
 
 export default (state = {}, action) => {
     switch(action.type) {
@@ -55,7 +56,7 @@ export default (state = {}, action) => {
         case GET_HISTORICAL_PRICES:
             return {
                 ...state,
-                histoPrices: action.payload
+                histoPrices: action.payload.historical
             };
 
         default:

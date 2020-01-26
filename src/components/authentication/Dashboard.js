@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import ApexCharts from 'apexcharts'
 import Card from 'react-bootstrap/Card';
+import TradingViewWidget, { Themes } from 'react-tradingview-widget';
 
 import {
     getProfile,
@@ -26,9 +26,26 @@ const mapStateToProps = state => {
 class Dashboard extends Component {
     constructor(props) {
         super(props);
-
         this.state = {
-            ticker: ''
+            ticker: '',
+            options: {
+                chart: {
+                    type: 'candlestick',
+                    height: 350
+                },
+                title: {
+                    text: 'CandleStick Chart',
+                    align: 'left'
+                },
+                xaxis: {
+                    type: 'datetime'
+                },
+                yaxis: {
+                    tooltip: {
+                        enabled: true
+                    }
+                }
+            }
         };
 
         this.update = this.update.bind(this);
@@ -65,6 +82,10 @@ class Dashboard extends Component {
                     </Card.Body>
                   </Card>
 
+                  { this.state.ticker ?
+                      <TradingViewWidget theme={Themes.DARK} symbol={this.state.ticker}/>
+                      : ''
+                  }
               </div>
           );
       }
