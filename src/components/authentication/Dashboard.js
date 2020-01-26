@@ -6,7 +6,7 @@ import Card from 'react-bootstrap/Card'
 import ProgressBar from 'react-bootstrap/ProgressBar'
 import TradingViewWidget, { Themes } from 'react-tradingview-widget';
 import { Line } from 'react-chartjs-2';
-
+import _ from 'lodash';
 import {
     getProfile,
     getPrice,
@@ -28,10 +28,12 @@ const mapStateToProps = state => {
         ticker:state.finance.ticker,
         quote:state.finance.quote,
         ratios:state.finance.ratios,
+        filtered_ratios:state.finance.filtered_ratios,
         growth:state.finance.growth,
         rating:state.finance.rating,
         histoPrices:state.finance.histoPrices,
-        keyratios:state.finance.keyratios
+        keyratios:state.finance.keyratios,
+        filtered_ratios_keys:state.finance.filtered_ratios_keys
 
     }
 };
@@ -91,7 +93,6 @@ class Dashboard extends Component {
                     <input type="button" value="Submit" onClick={this.update}/>
                   </form>
 
-                  {JSON.stringify(this.props.ratios, null, 2)}
 
                   <Card className="defaultcard">
                     <h1>Executive Summary</h1>
@@ -146,6 +147,30 @@ class Dashboard extends Component {
                       <TradingViewWidget theme={Themes.DARK} symbol={this.state.ticker}/>
                       : ''
                   }
+
+                  <Card style={{ width: '18rem' }}>
+                    <Card.Body>
+                      <Card.Title>Columns</Card.Title>
+                      <table>
+                        <tr>
+                          <th>Name</th>
+                          <th>Current</th>
+                        </tr>
+                    {
+                      _.map(this.props.filtered_ratios, (data, i) => {
+                        console.log(`Key: ${i}, Value: ${data}}`)
+                      return (
+                        <tr>
+                        <td>{i}</td>
+                        <td>{data}</td>
+                        </tr>
+                        )
+
+                      })}
+                      </table>
+
+                    </Card.Body>
+                  </Card>
               </div>
           );
       }
