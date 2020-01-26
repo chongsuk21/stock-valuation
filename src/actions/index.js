@@ -12,7 +12,10 @@ import {
     GET_HISTORICAL_PRICES,
     GET_KEY_RATIOS,
     GET_FINANCIAL_STATEMENTS,
-    GET_CASH_FLOW
+    GET_CASH_FLOW,
+    GET_FREE_CASH_FLOW,
+    GET_CAPITAL_EXPEUDITURE,
+    GET_COMPANY_RATING
 } from './constants';
 
 import config from '../config/config';
@@ -98,5 +101,26 @@ export const getCashflow = ticker => {
     return async dispatch => {
         let flow = await axios.get(`https://financialmodelingprep.com/api/v3/financials/cash-flow-statement/${ticker}`);
         dispatch({type: GET_CASH_FLOW, payload: flow.data});
+    }
+};
+
+export const getFreeCashflow = ticker => {
+    return async dispatch => {
+        let free = await axios.get(`https://financialmodelingprep.com/api/v3/financials/cash-flow-statement${ticker}`);
+        dispatch({type: GET_FREE_CASH_FLOW, payload: free.data});
+    }
+};
+
+export const getCapitalExpenditure = ticker => {
+    return async dispatch => {
+        let cpe = await axios.get(`https://financialmodelingprep.com/api/v3/financials/cash-flow-statement${ticker}`);
+        dispatch({type: GET_CAPITAL_EXPEUDITURE, payload: cpe.data});
+    }
+};
+
+export const getCompanyRating = ticker => {
+    return async dispatch => {
+        let cmr = await axios.get(`https://financialmodelingprep.com/api/v3/company/rating${ticker}`);
+        dispatch({type: GET_COMPANY_RATING, payload: cmr.data});
     }
 };

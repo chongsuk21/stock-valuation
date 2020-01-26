@@ -6,6 +6,8 @@ import Card from 'react-bootstrap/Card'
 import ProgressBar from 'react-bootstrap/ProgressBar'
 import TradingViewWidget, { Themes } from 'react-tradingview-widget';
 import { Bar, Line } from 'react-chartjs-2';
+import {Polar} from 'react-chartjs-2';
+
 import _ from 'lodash';
 
 import {
@@ -20,14 +22,20 @@ import {
     getHistoricalPrices,
     getFinancialStatements,
     getKeyRatios,
-    getCashflow
+    getCashflow,
+    getFreeCashflow,
+    getCapitalExpenditure,
+    getCompanyRating
 } from "../../actions";
 import {
     filterFinancialsForDate, filterFinancialsForEPS,
     filterFinancialsForNetIncome,
     filterFinancialsForRevenue,
     filterCashflowForNetcashflow,
-    filterCashflowForDate
+    filterCashflowForDate,
+    filterFreeCashflowForNetcashflow,
+    filterCapitalExpenditure,
+    filterCompanyRating
 } from "../../utilities/filtering";
 import {format} from "../../utilities/CurrencyFormat";
 
@@ -45,7 +53,9 @@ const mapStateToProps = state => {
         histoPrices:state.finance.histoPrices,
         keyratios:state.finance.keyratios,
         financials: state.finance.financials,
-        cashflow: state.finance.cashflow
+        cashflow: state.finance.cashflow,
+        freecashflow:state.finance.freecashflow,
+        //com_rating:state.company.com_rating
     }
 };
 
@@ -88,6 +98,9 @@ class Dashboard extends Component {
      this.props.getKeyRatios(this.state.ticker);
      this.props.getFinancialStatements(this.state.ticker);
      this.props.getCashflow(this.state.ticker);
+     this.props.getFreeCashflow(this.state.ticker);
+     this.props.getCapitalExpenditure(this.state.ticker);
+     this.props.getCompanyRating(this.state.ticker);
    };
 
 
@@ -211,6 +224,44 @@ class Dashboard extends Component {
                      pointHoverBorderWidth: 2,
                      pointHitRadius: 10,
                      data: filterCashflowForNetcashflow(this.props.cashflow)
+                 },
+                 {
+                     label: 'Free Cashflow',
+                     lineTension: 0.1,
+                     backgroundColor: 'black',
+                     borderColor: 'rgba(75,192,192,1)',
+                     borderCapStyle: 'butt',
+                     borderDash: [],
+                     borderDashOffset: 0.0,
+                     borderJoinStyle: 'miter',
+                     pointBorderColor: 'rgba(75,192,192,1)',
+                     pointBackgroundColor: '#fff',
+                     pointBorderWidth: 1,
+                     pointHoverRadius: 5,
+                     pointHoverBackgroundColor: 'rgba(75,192,192,1)',
+                     pointHoverBorderColor: 'rgba(220,220,220,1)',
+                     pointHoverBorderWidth: 2,
+                     pointHitRadius: 10,
+                     data: filterFreeCashflowForNetcashflow(this.props.cashflow)
+                 },
+                 {
+                     label: 'Capital Expenditure',
+                     lineTension: 0.1,
+                     backgroundColor: 'red',
+                     borderColor: 'rgba(75,192,192,1)',
+                     borderCapStyle: 'butt',
+                     borderDash: [],
+                     borderDashOffset: 0.0,
+                     borderJoinStyle: 'miter',
+                     pointBorderColor: 'rgba(75,192,192,1)',
+                     pointBackgroundColor: '#fff',
+                     pointBorderWidth: 1,
+                     pointHoverRadius: 5,
+                     pointHoverBackgroundColor: 'rgba(75,192,192,1)',
+                     pointHoverBorderColor: 'rgba(220,220,220,1)',
+                     pointHoverBorderWidth: 2,
+                     pointHitRadius: 10,
+                     data: filterCapitalExpenditure(this.props.cashflow)
                  }
              ]
          };
@@ -227,11 +278,41 @@ class Dashboard extends Component {
                  }]
              },
          };
+
+         const CMRdata = {
+           datasets: [{
+                data: [
+                  this.props.rating?this.props.rating.ratingDetails['P/B'].score:"",
+                  this.props.rating?this.props.rating.ratingDetails.ROA.score:"",
+                  this.props.rating?this.props.rating.ratingDetails.DCF.score:"",
+                  this.props.rating?this.props.rating.ratingDetails['P/E'].score:"",
+                  this.props.rating?this.props.rating.ratingDetails.ROE.score:"",
+                  this.props.rating?this.props.rating.ratingDetails['D/E'].score:""
+                ],
+                backgroundColor: [
+                  '#FF6384',
+                  '#4BC0C0',
+                  '#FFCE56',
+                  '#E7E9ED',
+                  '#36A2EB',
+                  '#B8860B'
+                ],
+                label: 'Company Rating' // for legend
+                }],
+                labels: [
+                  'P/B',
+                  'ROA',
+                  'DCF',
+                  'P/E',
+                  'ROE',
+                  'D/E'
+                ]
+        };
           return (
 
               <div className="abc">
 
-
+              {console.log(this.props.financials)}
                   <form>
                     <input type="text" onChange={evt => {this.setState({...this.state, ticker: evt.target.value.toUpperCase()})}}/>
                     <input type="button" value="Submit" onClick={this.update}/>
@@ -274,6 +355,7 @@ class Dashboard extends Component {
                               <Bar data={Revdata} options={Revoptions}/>
                               <Line data={EPSdata} options={EPSoptions} />
                               <Bar data={Cfdata} options={Cfoptions}/>
+                              <Polar data={CMRdata} />
                           </Card.Text>
                       </Card.Body>
                   </Card>
@@ -317,6 +399,8 @@ class Dashboard extends Component {
 
                     </Card.Body>
                   </Card>
+
+
               </div>
           );
       }
@@ -335,7 +419,10 @@ const mapDispatchToProps = {
     getHistoricalPrices,
     getKeyRatios,
     getFinancialStatements,
-    getCashflow
+    getCashflow,
+    getFreeCashflow,
+    getCapitalExpenditure,
+    getCompanyRating
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

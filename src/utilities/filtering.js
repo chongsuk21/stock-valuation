@@ -37,3 +37,21 @@ export const filterCashflowForNetcashflow = data => {
         return parseFloat(cf["Net cash flow / Change in cash"]);
     }).reverse();
 };
+
+export const filterFreeCashflowForNetcashflow = data => {
+    return _.map(data, fcf => {
+        return parseFloat(fcf["Free Cash Flow"]);
+    }).reverse();
+};
+
+export const filterCapitalExpenditure = data => {
+    return _.map(data, fcf => {
+        return parseFloat(fcf["Capital Expenditure"]);
+    }).reverse();
+};
+
+export const filterCompanyRating = data => {
+    return _.map(data, cmr => {
+        return parseFloat(cmr["rating"]);
+    }).reverse();
+};
